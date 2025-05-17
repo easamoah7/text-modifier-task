@@ -20,7 +20,14 @@ The project implements a fully modular architecture:
 
 ## Usage
 
-### Manual Trigger
+### Workflow Triggers
+
+The workflow is triggered in two ways:
+
+1. **Automatically**: On push to the `main` branch
+2. **Manually**: Via workflow_dispatch with configurable parameters
+
+### Manual Trigger Parameters
 
 You can manually trigger the workflow with the following parameters:
 
@@ -35,6 +42,6 @@ You can manually trigger the workflow with the following parameters:
 Pull and run the image:
 
 ```bash
-docker pull ghcr.io/{your-username}/text-modifier-app:latest
-docker run --rm ghcr.io/{your-username}/text-modifier-app:latest
+docker pull ghcr.io/easamoah7/text-modifier-app:latest
+docker run --rm ghcr.io/easamoah7/text-modifier-app:latest
 ```
