@@ -1,0 +1,46 @@
+name: 'Text File Modifier'
+description: 'Modifies text in a file by replacing one string with another'
+
+inputs:
+  file-path:
+    description: 'Path to the text file to modify'
+    required: true
+  old-text:
+    description: 'Text to replace'
+    required: false
+    default: 'tag 1'
+  new-text:
+    description: 'New text to insert'
+    required: false
+    default: 'tag 2'
+  commit-changes:
+    description: 'Whether to commit the changes'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Modify Text File
+      shell: bash
+      run: |
+        if [ -f "${{ inputs.file-path }}" ]; then
+          sed -i "s/${{ inputs.old-text }}/${{ inputs.new-text }}/g" "${{ inputs.file-path }}"
+          echo "✅ Modified file: ${{ inputs.file-path }}"
+          echo "   Replaced '${{ inputs.old-text }}' with '${{ inputs.new-text }}'"
+        else
+          echo "❌ Error: File ${{ inputs.file-path }} not found"
+          exit 1
+        fi
+
+    - name: Commit Changes
+      if: ${{ inputs.commit-changes == 'true' }}
+      shell: bash
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add "${{ inputs.file-path }}"
+        git commit -m "Update '${{ inputs.old-text }}' to '${{ inputs.new-text }}' in ${{ inputs.file-path }}" || echo "No changes to commit"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ github.token }}

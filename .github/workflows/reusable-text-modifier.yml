@@ -1,0 +1,44 @@
+name: Reusable Text Modifier Workflow
+
+on:
+  workflow_call:
+    inputs:
+      file-path:
+        description: 'Path to the text file to modify'
+        required: true
+        type: string
+      old-text:
+        description: 'Text to replace'
+        required: false
+        type: string
+        default: 'tag 1'
+      new-text:
+        description: 'Text to insert'
+        required: false
+        type: string
+        default: 'tag 2'
+      commit-changes:
+        description: 'Whether to commit the changes'
+        required: false
+        type: string
+        default: 'true'
+
+jobs:
+  modify-text:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Modify Text File
+        uses: ./.github/actions/text-modifier
+        with:
+          file-path: ${{ inputs.file-path }}
+          old-text: ${{ inputs.old-text }}
+          new-text: ${{ inputs.new-text }}
+          commit-changes: ${{ inputs.commit-changes }}

@@ -1,0 +1,43 @@
+name: Modify Text and Build Docker Image
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      file-path:
+        description: 'Path to the text file to modify'
+        required: false
+        default: 'content.txt'
+      old-text:
+        description: 'Text to replace'
+        required: false
+        default: 'tag 1'
+      new-text:
+        description: 'Text to insert'
+        required: false
+        default: 'tag 2'
+      image-name:
+        description: 'Docker image name'
+        required: false
+        default: 'text-modifier-app'
+      image-tag:
+        description: 'Docker image tag'
+        required: false
+        default: 'latest'
+
+jobs:
+  modify-text:
+    uses: ./.github/workflows/reusable-text-modifier.yml
+    with:
+      file-path: ${{ github.event.inputs.file-path || 'content.txt' }}
+      old-text: ${{ github.event.inputs.old-text || 'tag 1' }}
+      new-text: ${{ github.event.inputs.new-text || 'tag 2' }}
+      commit-changes: 'true'
+
+  build-and-push:
+    needs: modify-text
+    uses: ./.github/workflows/reusable-docker-builder.yml
+    with:
+      image-name: ${{ github.event.inputs.image-name || 'text-modifier-app' }}
+      image-tag: ${{ github.event.inputs.image-tag || 'latest' }}
