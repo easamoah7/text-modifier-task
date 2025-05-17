@@ -1,6 +1,6 @@
 # Text Modifier Task
 
-A GitHub Actions project demonstrating modular, reusable, and scalable workflows for text modification and Docker image building.
+A GitHub Actions task demonstrating modular, reusable, and scalable workflows for text modification and Docker image building.
 
 ## Project Features
 
