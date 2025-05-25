@@ -1,3 +1,4 @@
 This is a sample file
 Here is tag 2 that will be modified
 More content here!
+I am going
